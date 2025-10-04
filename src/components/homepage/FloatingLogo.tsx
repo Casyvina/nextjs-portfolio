@@ -14,8 +14,8 @@ export default function FloatingLogo() {
 
     // only show logo if we are NOT on #home
     const visible = activeId && activeId !== "home";
-    console.log("Active ID:", activeId); // Debugging line to check the active ID
-    console.log("Logo Visible:", visible); // Debugging line to check visibility
+    // console.log("Active ID:", activeId); // Debugging line to check the active ID
+    // console.log("Logo Visible:", visible); // Debugging line to check visibility
 
     return (
         <AnimatePresence>

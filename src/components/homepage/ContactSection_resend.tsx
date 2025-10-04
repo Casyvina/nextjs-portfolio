@@ -4,8 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { BackgroundBeams } from "@/components/ui/background-beams";
 import { motion, AnimatePresence } from "framer-motion";
-import Confetti from "react-confetti";
-import emailjs from "emailjs-com";
+import Confetti from "react-confetti"; // install with `npm i react-confetti`
 
 export function ContactSection() {
     const { register, handleSubmit, reset, setValue } = useForm();
@@ -13,7 +12,7 @@ export function ContactSection() {
     const [celebrate, setCelebrate] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    // preload plan data if selected
+    // Load selected plan into form
     useEffect(() => {
         const fillForm = () => {
             const saved = localStorage.getItem("selectedPlan");
@@ -33,29 +32,39 @@ export function ContactSection() {
     }, [setValue]);
 
     const onSubmit = async (data: any) => {
+        console.log("Form submitted:", data);
         setLoading(true);
+
         try {
-            await emailjs.send("service_u8v6yne", "template_ryp472e", {
-                name: data.name,
-                email: data.email,
-                business: data.business,
-                budget: data.budget,
-                message: data.message,
-                time: new Date().toLocaleString(),
-            }, "QdICJVz6Kr6N4L456");
+            const res = await fetch("/api/send-mail", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data),
+            });
+
+            const result = await res.json();
+
+            if (!res.ok || result.error) {
+                console.error("Resend error:", result.error);
+                throw new Error(
+                    typeof result.error === "string"
+                        ? result.error
+                        : result.error?.message || "Failed to send"
+                );
+            }
 
             reset();
             setCelebrate(true);
             setShowSuccess(true);
-
             setTimeout(() => setCelebrate(false), 5000);
-        } catch (err) {
-            console.error("EmailJS error:", err);
-            alert("❌ Something went wrong. Please try again.");
+        } catch (err: any) {
+            console.error("Email failed:", err);
+            alert(err.message || "Something went wrong. Please try again.");
         } finally {
             setLoading(false);
         }
     };
+
 
     return (
         <motion.section
@@ -65,6 +74,7 @@ export function ContactSection() {
             transition={{ duration: 0.6 }}
             className="relative h-[50rem] w-full bg-neutral-950 flex flex-col items-center justify-center antialiased"
         >
+            {/* 🎊 Confetti */}
             {celebrate && <Confetti recycle={false} numberOfPieces={300} />}
 
             <div className="relative z-10 max-w-3xl mx-auto px-6 py-12 rounded-xl">
@@ -75,6 +85,7 @@ export function ContactSection() {
                     Tell me about your business and your goals. I’ll reply within 24 hours.
                 </p>
 
+                {/* ✅ Hide form when success card is showing */}
                 {!showSuccess && (
                     <form
                         onSubmit={handleSubmit(onSubmit)}
@@ -155,7 +166,8 @@ export function ContactSection() {
                 )}
             </div>
 
-            {/* <AnimatePresence>
+            {/* ✅ Success Modal with backdrop */}
+            <AnimatePresence>
                 {showSuccess && (
                     <motion.div
                         initial={{ opacity: 0 }}
@@ -170,7 +182,9 @@ export function ContactSection() {
                             transition={{ type: "spring", stiffness: 200, damping: 20 }}
                             className="bg-white dark:bg-slate-900 rounded-xl shadow-2xl p-8 max-w-sm text-center"
                         >
-                            <h3 className="text-xl font-bold text-indigo-600">🎉 Message Sent!</h3>
+                            <h3 className="text-xl font-bold text-indigo-600">
+                                🎉 Message Sent!
+                            </h3>
                             <p className="mt-2 text-slate-600 dark:text-slate-400">
                                 Thanks for reaching out. I’ll respond within 24 hours.
                             </p>
@@ -183,60 +197,7 @@ export function ContactSection() {
                         </motion.div>
                     </motion.div>
                 )}
-            </AnimatePresence> */}
-
-            <AnimatePresence>
-                {showSuccess && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
-                    >
-                        <motion.div
-                            initial={{ scale: 0.8 }}
-                            animate={{ scale: 1 }}
-                            exit={{ scale: 0.8 }}
-                            transition={{ type: "spring", stiffness: 200, damping: 20 }}
-                            className="rounded-xl shadow-2xl p-8 max-w-sm text-center 
-                   bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 
-                   text-white"
-                        >
-                            {/* ✅ Animated Checkmark */}
-                            <motion.svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 52 52"
-                                className="w-16 h-16 mx-auto mb-4"
-                            >
-                                <motion.path
-                                    fill="none"
-                                    stroke="#fff"
-                                    strokeWidth="5"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    d="M14 27l7 7 17-17"
-                                    initial={{ pathLength: 0 }}
-                                    animate={{ pathLength: 1 }}
-                                    transition={{ duration: 0.7, ease: "easeInOut" }}
-                                />
-                            </motion.svg>
-
-                            <h3 className="text-2xl font-bold">🎉 Message Sent!</h3>
-                            <p className="mt-3 text-white/90">
-                                Thanks for reaching out. I’ll respond within 24 hours.
-                            </p>
-                            <button
-                                onClick={() => setShowSuccess(false)}
-                                className="mt-6 px-6 py-2 rounded-lg bg-white/20 hover:bg-white/30 
-                     transition text-white font-semibold backdrop-blur-md"
-                            >
-                                Close
-                            </button>
-                        </motion.div>
-                    </motion.div>
-                )}
             </AnimatePresence>
-
 
             <BackgroundBeams />
         </motion.section>

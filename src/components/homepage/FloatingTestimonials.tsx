@@ -1,32 +1,33 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 
-// fake testimonials
+// ✅ Use forward slashes for Next.js public assets
 const testimonials = [
     {
         id: 1,
-        name: "Ada Lovelace",
-        avatar: "https://i.pravatar.cc/100?img=1",
-        text: "Joseph gave me a site that doubled my bookings in 2 weeks 🚀",
+        name: "Ada lovelace",
+        avatar: "/assets/testimonials/9.jpg",
+        text: "Buyeni gave me a site that doubled my bookings in 2 weeks 🚀",
     },
     {
         id: 2,
         name: "Chinedu Eze",
-        avatar: "https://i.pravatar.cc/100?img=2",
+        avatar: "/assets/testimonials/1.jpg",
         text: "The best dev I’ve worked with. Fast, clean, and reliable! 🙌",
     },
     {
         id: 3,
         name: "Amaka Beauty",
-        avatar: "https://i.pravatar.cc/100?img=3",
+        avatar: "/assets/testimonials/10.jpg",
         text: "My Instagram followers now buy directly from my website 💅🏽✨",
     },
     {
         id: 4,
         name: "David Umeh",
-        avatar: "https://i.pravatar.cc/100?img=4",
+        avatar: "/assets/testimonials/4.jpg",
         text: "Very professional and easy to work with. Highly recommended ⭐️⭐️⭐️⭐️⭐️",
     },
 ];
@@ -51,9 +52,13 @@ type ActiveTestimonial = {
 
 export default function FloatingTestimonials() {
     const [queue, setQueue] = useState<ActiveTestimonial[]>([]);
+    const timersRef = useRef<NodeJS.Timeout[]>([]);
 
     useEffect(() => {
-        let cycleTimeout: NodeJS.Timeout;
+        const clearAllTimers = () => {
+            timersRef.current.forEach((t) => clearTimeout(t));
+            timersRef.current = [];
+        };
 
         const showTestimonial = () => {
             const random =
@@ -61,39 +66,39 @@ export default function FloatingTestimonials() {
 
             const newT: ActiveTestimonial = { ...random, showText: false };
 
-            // add bubble with typing dots only
+            // Add bubble (max 3, remove oldest if full)
             setQueue((prev) => {
-                if (prev.length >= 3) return [newT]; // reset if stack too big
+                if (prev.length >= 3) return [...prev.slice(1), newT];
                 return [...prev, newT];
             });
 
-            // after 2s replace typing dots with text
-            setTimeout(() => {
+            // Reveal text after 2s
+            const typingTimer = setTimeout(() => {
                 setQueue((prev) =>
                     prev.map((item) =>
                         item.id === newT.id ? { ...item, showText: true } : item
                     )
                 );
             }, 2000);
+            timersRef.current.push(typingTimer);
 
-            // auto-dismiss after 15s
-            setTimeout(() => {
+            // Auto-dismiss after 15s
+            const dismissTimer = setTimeout(() => {
                 setQueue((prev) => prev.slice(1));
             }, 15000);
+            timersRef.current.push(dismissTimer);
         };
 
-        const startCycle = () => {
+        // Cycle every 60s after first appears at 40s
+        const firstTimer = setTimeout(() => {
             showTestimonial();
-            // wait 1min before starting again
-            cycleTimeout = setTimeout(startCycle, 60000);
-        };
-
-        // first after 40s
-        const first = setTimeout(startCycle, 40000);
+            const cycleTimer = setInterval(showTestimonial, 60000);
+            timersRef.current.push(cycleTimer as unknown as NodeJS.Timeout);
+        }, 40000);
+        timersRef.current.push(firstTimer);
 
         return () => {
-            clearTimeout(first);
-            clearTimeout(cycleTimeout);
+            clearAllTimers();
         };
     }, []);
 
@@ -108,12 +113,14 @@ export default function FloatingTestimonials() {
                         exit={{ x: -200, opacity: 0 }}
                         transition={{ duration: 0.5 }}
                         className="flex items-center gap-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 shadow-lg px-3 py-2 sm:px-4 sm:py-3 rounded-xl sm:rounded-2xl relative"
-                        style={{ marginLeft: idx * 12 }}
+                        style={{ transform: `translateY(-${idx * 12}px)` }} // ✅ cascade upward
                     >
-                        <img
+                        <Image
                             src={t.avatar}
                             alt={t.name}
-                            className="w-8 h-8 sm:w-10 sm:h-10 rounded-full"
+                            width={40}
+                            height={40}
+                            className="rounded-full object-cover"
                         />
                         <div>
                             <p className="text-xs sm:text-sm font-semibold">{t.name}</p>
