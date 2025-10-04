@@ -35,14 +35,19 @@ export function ContactSection() {
     const onSubmit = async (data: any) => {
         setLoading(true);
         try {
-            await emailjs.send("service_u8v6yne", "template_ryp472e", {
-                name: data.name,
-                email: data.email,
-                business: data.business,
-                budget: data.budget,
-                message: data.message,
-                time: new Date().toLocaleString(),
-            }, "QdICJVz6Kr6N4L456");
+            await emailjs.send(
+                process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
+                process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
+                {
+                    name: data.name,
+                    email: data.email,
+                    business: data.business,
+                    budget: data.budget,
+                    message: data.message,
+                    time: new Date().toLocaleString(),
+                },
+                process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!
+            );
 
             reset();
             setCelebrate(true);
