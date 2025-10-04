@@ -47,7 +47,7 @@ export function ScrollNavigator() {
 
     return (
         <motion.div
-            className="fixed bottom-10 z-50 left-1/2 -translate-x-1/2 text-slate-500 dark:text-slate-400 cursor-pointer"
+            className="fixed bottom-16 md:bottom-10 z-50 left-1/2 -translate-x-1/2 text-slate-500 dark:text-slate-400 cursor-pointer"
             animate={{ y: [0, 10, 0] }}
             transition={{ duration: 1.5, repeat: Infinity }}
             onClick={handleClick}

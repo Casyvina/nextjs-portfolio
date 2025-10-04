@@ -12,27 +12,30 @@ import Footer from "@/components/homepage/Footer";
 import PricingSection from "@/components/homepage/PricingSection";
 import { ChatWidget } from "@/components/homepage/ChatWidget";
 import FloatingChat from "@/components/homepage/FloatingChat";
-import { useScrollSpyWithUrl } from "@/components/ui/useScrollSpy";
+import FloatingTestimonials from "@/components/homepage/FloatingTestimonials";
+import FloatingLogo from "@/components/homepage/FloatingLogo";
 
 
 export default function Home() {
-
-  const sectionIds = ["hero", "portfolio", "pricing", "about", "contact"];
-  const activeId = useScrollSpyWithUrl(sectionIds, 80);
 
 
   return (
     <main className="relative min-h-screen bg-gradient-to-tr from-indigo-50 via-white to-pink-50 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 text-slate-900 dark:text-slate-100 transition-colors duration-500">
 
 
-
-      {/* <ChatWidget /> */}
-      {/* CHAT */}
+      {/* FLOATING CHAT */}
       <FloatingChat />
 
       {/* SCROLL INDICATOR */}
       <ScrollNavigator />
 
+      {/* FLOATING LOGO */}
+      <FloatingLogo />
+
+      {/* FLOATING TESTIMONIALS */}
+      <FloatingTestimonials />
+
+      {/* FLOATING NAVBAR */}
       <FloatingNavDemo />
 
       {/* HERO */}

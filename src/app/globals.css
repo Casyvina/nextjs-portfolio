@@ -181,3 +181,8 @@ section {
   background-image: url('/whatsapp-bg.jpg');
   background-size: cover;
 }
+
+html,
+body {
+  overflow-x: hidden;
+}

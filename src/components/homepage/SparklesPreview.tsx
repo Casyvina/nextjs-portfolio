@@ -2,6 +2,7 @@
 import { SparklesCore } from "@/components/ui/sparkles";
 import React from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 // import { SparklesCore } from "../ui/sparkles";
 
 export function SparklesPreview() {
@@ -9,17 +10,18 @@ export function SparklesPreview() {
         <section id="home"
             className="h-[40rem] relative w-full bg-black flex flex-col items-center justify-center overflow-hidden rounded-md">
             {/* Animated Heading */}
-            <motion.h1
+            <motion.div
                 initial={{ x: -200, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 transition={{
                     duration: 1,
                     ease: "easeOut",
                 }}
-                className="md:text-7xl text-5xl lg:text-9xl text-center text-white relative z-20"
+            // className="md:text-7xl text-5xl lg:text-9xl text-center text-white relative z-20"
             >
-                Bu Yéni
-            </motion.h1>
+                <Image src={"/assets/logo_nobg.png"} alt="logo" width={400} height={200} className="animate-pulse hidden md:block" />
+                <Image src={"/assets/logo_nobg.png"} alt="logo" width={200} height={100} className="animate-pulse md:hidden" />
+            </motion.div>
             <motion.h1
                 initial={{
                     opacity: 0

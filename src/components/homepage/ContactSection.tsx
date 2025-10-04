@@ -103,7 +103,7 @@ export function ContactSection() {
                         </button>
 
                         <a
-                            href="https://wa.me/1234567890?text=Hi%2C%20I%27m%20interested%20in%20a%20website"
+                            href="https://wa.me/?text=Hi%2C%20I%27m%20interested%20in%20a%20website"
                             target="_blank"
                             rel="noreferrer"
                             className="px-6 py-3 rounded-lg border border-neutral-700 text-neutral-300 hover:border-green-500 hover:text-green-400 transition"
