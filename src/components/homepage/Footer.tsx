@@ -6,7 +6,7 @@ const Footer = () => {
             <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
                 {/* Left side */}
                 <div className="text-sm text-slate-600 dark:text-slate-400 text-center md:text-left">
-                    © {new Date().getFullYear()} Buyeni • Made with <span className="text-red-500">❤️</span> by Buyeni
+                    © {new Date().getFullYear()} Buyeni • Made with <span className="text-red-500">❤️</span> by Joseph
                 </div>
 
                 {/* Right side */}

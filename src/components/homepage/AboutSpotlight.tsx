@@ -25,7 +25,7 @@ export function AboutSpotlight() {
             {/* Content */}
             <div className="relative z-10 mx-auto w-full max-w-4xl p-6 text-center">
                 <h2 className="bg-gradient-to-b from-neutral-50 pb-2 to-neutral-400 bg-clip-text text-transparent text-3xl md:text-6xl font-extrabold">
-                    Hi — I&apos;m Buyéni
+                    Hi — I&apos;m Joseph
                 </h2>
 
                 <p className="mt-6 text-neutral-300 text-justify leading-relaxed">

@@ -34,7 +34,7 @@ export function SparklesPreview() {
                     ease: "easeInOut"
                 }}
                 className="absolute text-white/20 text-2xl md:text-5xl  top-1/2.95 md:top-1/2 font-bold items-center stroke-cyan-900">
-                Web Dev
+                Full Stack Dev
             </motion.h1>
             <div className="w-[40rem] h-40 relative">
                 {/* Gradients */}
